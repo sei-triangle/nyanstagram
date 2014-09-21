@@ -9,23 +9,22 @@
 import UIKit
 
 class ViewController: UIViewController, UIWebViewDelegate {
+    let DEFAULT_URL = ""
+    
     @IBOutlet weak var webView: UIWebView!
     @IBOutlet weak var btnBack: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        
         request()
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     func webViewDidStartLoad(webView: UIWebView) {
@@ -36,27 +35,18 @@ class ViewController: UIViewController, UIWebViewDelegate {
         SVProgressHUD.dismiss()
         btnBack.enabled = webView.canGoBack
         
-//        let script = "document.body.innerHTML"
         let script = "document.querySelector('div.Frame').getAttribute('src')"
         let html = webView.stringByEvaluatingJavaScriptFromString(script)
         if html != nil && html != "" {
-//            println(html)
             downLoadImage(html!)
         }
     }
     
     func downLoadImage(imageUrl: String) {
-//        let URL = NSURL(string: imageUrl)
-//        let request = NSURLRequest(URL: URL)
-//        imgView.setImageWithURL(URL)
-//        let operation = AFImageRequestOperation.
-//        webView2.loadRequest(request)
-        
         let alert = UIAlertController(title: "画像保存", message: "画像を保存しますか？", preferredStyle: .Alert)
         let okAction = UIAlertAction(title: "YES", style: .Default) { action in
             var manager = AFHTTPRequestOperationManager()
             manager.responseSerializer = AFImageResponseSerializer()
-//            manager.GET(imageUrl, parameters: nil, success: {(o, i) -> in nil}, failure: nil)
             manager.GET(imageUrl, parameters: nil,
                 success: { (operation: AFHTTPRequestOperation!, responseObject: AnyObject!) in
                     if let img : UIImage = responseObject as? UIImage {
@@ -76,13 +66,11 @@ class ViewController: UIViewController, UIWebViewDelegate {
     }
 
     func request() {
-        let con: UINavigationController = KINWebBrowserViewController.navigationControllerWithWebBrowser()
-        self.presentViewController(con, animated: true, completion: nil)
-        let URL = NSURL(string: "http://instagram.com/nyanchan22")
-//        con.loadURL(URL)
-//        self.navigationController!.pushViewController(con, animated: true)
-        let browser = con.rootWebBrowserViewController()
-        browser.loadURLString("http://instagram.com/nyanchan22")
+//        let con: UINavigationController = KINWebBrowserViewController.navigationControllerWithWebBrowser()
+//        self.presentViewController(con, animated: true, completion: nil)
+        let URL = NSURL(string: DEFAULT_URL)
+//        let browser = con.rootWebBrowserViewController()
+//        browser.loadURLString("http://instagram.com/nyanchan22")
         
         webView.scalesPageToFit = true
         webView.loadRequest(NSURLRequest(URL: URL))
